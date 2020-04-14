@@ -1,0 +1,4 @@
+#!/bin/bash
+docker build -t sitesauce/tunnel .
+echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+docker push sitesauce/tunnel

@@ -1,4 +1,4 @@
-#!/usr/bin/env node -r esm
+#!/usr/bin/env -S node -r esm
 
 import 'localenv';
 import optimist from 'optimist';
@@ -8,7 +8,7 @@ import Debug from 'debug';
 
 import CreateServer from '../server';
 
-const debug = Debug('localtunnel');
+const debug = Debug('tunnel');
 
 const argv = optimist
     .usage('Usage: $0 --port [num]')
@@ -25,12 +25,16 @@ const argv = optimist
         describe: 'IP address to bind to'
     })
     .options('domain', {
-        describe: 'Specify the base domain name. This is optional if hosting localtunnel from a regular example.com domain. This is required if hosting a localtunnel server from a subdomain (i.e. lt.example.dom where clients will be client-app.lt.example.come)',
+        describe: 'Specify the base domain name. This is optional if hosting the server from a regular example.com domain. This is required if hosting a server from a subdomain (i.e. lt.example.dom where clients will be client-app.lt.example.come)',
     })
     .options('max-sockets', {
         default: 10,
         describe: 'maximum number of tcp sockets each client is allowed to establish at one time (the tunnels)'
-    })
+	})
+	.options('landing', {
+		default: 'https://sitesauce.app',
+		describe: 'The landing page for redirect from root domain'
+	})
     .argv;
 
 if (argv.help) {
@@ -41,7 +45,8 @@ if (argv.help) {
 const server = CreateServer({
     max_tcp_sockets: argv['max-sockets'],
     secure: argv.secure,
-    domain: argv.domain,
+	domain: argv.domain,
+	landing: argv.landing,
 });
 
 server.listen(argv.port, argv.address, () => {
@@ -65,4 +70,3 @@ process.on('unhandledRejection', (reason, promise) => {
 });
 
 // vim: ft=javascript
-

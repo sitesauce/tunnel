@@ -16,7 +16,13 @@ describe('Server', () => {
     it('should redirect root requests to landing page', async () => {
         const server = createServer();
         const res = await request(server).get('/');
-        assert.equal('https://localtunnel.github.io/www/', res.headers.location);
+        assert.equal('https://sitesauce.app/', res.headers.location);
+	});
+
+    it('should support custom redirect paths', async () => {
+        const server = createServer({ landing: 'https://example.com/' });
+        const res = await request(server).get('/');
+        assert.equal('https://example.com/', res.headers.location);
     });
 
     it('should support custom base domains', async () => {
@@ -25,7 +31,7 @@ describe('Server', () => {
         });
 
         const res = await request(server).get('/');
-        assert.equal('https://localtunnel.github.io/www/', res.headers.location);
+        assert.equal('https://sitesauce.app/', res.headers.location);
     });
 
     it('reject long domain name requests', async () => {
@@ -42,7 +48,7 @@ describe('Server', () => {
         await new Promise(resolve => server.listen(resolve));
 
         const res = await request(server).get('/websocket-test');
-        const localTunnelPort = res.body.port;
+        const tunnelPort = res.body.port;
 
         const wss = await new Promise((resolve) => {
             const wsServer = new WebSocketServer({ port: 0 }, () => {
@@ -52,7 +58,7 @@ describe('Server', () => {
 
         const websocketServerPort = wss.address().port;
 
-        const ltSocket = net.createConnection({ port: localTunnelPort });
+        const ltSocket = net.createConnection({ port: tunnelPort });
         const wsSocket = net.createConnection({ port: websocketServerPort });
         ltSocket.pipe(wsSocket).pipe(ltSocket);
 
