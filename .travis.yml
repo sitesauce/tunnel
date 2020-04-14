@@ -1,11 +1,19 @@
 language: node_js
 services:
-  - docker
+- docker
 node_js:
-    - "9.2"
+- '9.2'
 deploy:
-  skip_cleanup: true
-  provider: script
-  script: ./bin/docker-deploy
-  on:
-    branch: master
+  - provider: script
+    skip_cleanup: true
+    script: ./bin/docker-deploy
+    on:
+      branch: master
+      repo: sitesauce/tunnel
+  - provider: npm
+    email: soy@miguelpiedrafita.com
+    api_key:
+      secure: yshTVrCRETj2RTxBvYj9pdwkAUH9ylehUhNmXbJ7DNyFnvdW25fdp4Dx2dSQusUZ2zv7pgzcjadcptUnwae9PqDU8eFmBK6qWIoSiJZYxzaFJii/hK18id2zE7q3ZvAZOmTCwy0iL1gkm2tj9HTFIp5EzfBoK3pjtsFXZk7Wst/VWzhFuGgMLBPyQIHaQXF02QVhc+FyCm5RqsF9RAgS14h3aw0wXjot4FJ+CjOrukhyqCJ85VvTpUV0O0CurM7H0xWiGHVmTplCxxugQP5EV6x2bRyJjX4Dt+mSZr4EoFA/PgOW5l/pVrx/CjNb8mzFTTmXA117+J0u//2lNg+EZSBSfSNhLIkpu0tylQTndGGHnS574Mis9j6ATfkrFT7lTQTuV7jEFT9AuemkzsghN4sbeU2uJ/BaTs7sPoE0nxCyCh7TjCpkGQ9CfzvYShlybhyjXDD0aiTaxq+/hBuzA/2O2Z7Dwq8lQlPy6KIz0wagP7Hi7rOTYsWWrB0gJkiFtvwiQaRlEIaMlP92OOAGIAoEBxtBcYFeulZVSSHcVt9csEWT5Jy3RyPun1TwUqA7S/Ur68wHEq4e5HMq6Jyi2L82LdbwiDXoRBJYiWitygB2RbJx3NPDtn65DpqnRID03VaIEpACl9u3u43yQg9QILE64IAXGd+l8HwCP3pbr+8=
+    on:
+      tags: true
+      repo: sitesauce/tunnel
